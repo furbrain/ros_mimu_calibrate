@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>mimu_calibrate</name>
+  <version>0.0.0</version>
+  <description>The mimu_calibrate package</description>
+  <maintainer email="beardydoc@gmail.com">Phil Underwood</maintainer>
+  <license>MIT</license>
+
+
+  <!-- Url tags are optional, but multiple are allowed, one per tag -->
+  <!-- Optional attribute type can be: website, bugtracker, or repository -->
+  <!-- Example: -->
+  <!-- <url type="website">http://wiki.ros.org/mimu_calibrate</url> -->
+
+  <depend>rospy</depend>
+  <depend>std_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <buildtool_depend>catkin</buildtool_depend>
+</package>
