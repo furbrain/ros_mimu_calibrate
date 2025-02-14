@@ -9,6 +9,7 @@ from geometry_msgs.msg import Vector3
 from scipy.spatial import KDTree
 from sensor_msgs.msg import PointCloud2, PointField, Imu, MagneticField
 from std_msgs.msg import Header
+from mimu_calibrate.srv import CalibrateRequest, CalibrateResponse, Calibrate
 
 ROLLING_BUF_SIZE = 25
 
@@ -38,11 +39,12 @@ def create_cloud_xyz32(points: np.ndarray):
                        data=data)
 
 
-class Calibrate:
+class CalibrateNode:
     def __init__(self):
         self.pub = rospy.Publisher("magnetic_points", PointCloud2, queue_size=5)
         self.imu_sub = rospy.Subscriber("/imu/imu_raw", Imu, self.imu_callback, queue_size=5)
         self.mag_sub = rospy.Subscriber("/imu/magnetic_raw", MagneticField, self.mag_callback, queue_size=5)
+        self.cal_svr = rospy.Service("calibrate", Calibrate, self.handle_calibrate)
         self.mag_points = np.empty((0,3), dtype=np.float32)
         self.mag_kdtree: KDTree = None
         self.grav_points = np.empty((0,3))
@@ -78,7 +80,11 @@ class Calibrate:
         #print(cloud)
         self.pub.publish(cloud)
 
+    def handle_calibrate(self, req: CalibrateRequest):
+        print("handle_calibrate called")
+        return CalibrateResponse(True)
+
 if __name__ == '__main__':
     rospy.init_node("imu_calibrate")
-    Calibrate()
+    CalibrateNode()
     rospy.spin()
