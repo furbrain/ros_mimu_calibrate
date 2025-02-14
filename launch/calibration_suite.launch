@@ -1,0 +1,17 @@
+<launch>
+<node name="collate" pkg="mimu_calibrate" type="collate.py">
+  <remap from="magnetic_raw" to="mag_raw"/>
+</node>
+<node name="calibrate" pkg="mimu_calibrate" type="calibrate.py">
+  <remap from="all_magnetic_points" to="collate/all_magnetic_points"/>
+</node>
+<node name="$(anon scale1)" pkg="mimu_calibrate" type="cloud_scale.py">
+  <remap from="in" to="collate/all_magnetic_points"/>
+  <remap from="out" to="all_scaled_mag_points"/>
+</node>
+<node name="$(anon scale2)" pkg="mimu_calibrate" type="cloud_scale.py">
+  <remap from="in" to="collate/all_magnetic_points"/>
+  <remap from="out" to="half_scaled_mag_points"/>
+  <param name="scale" value="50000"/>
+</node>
+</launch>
