@@ -1,17 +1,27 @@
 <launch>
+<arg name="mag_axes" default="+X+Y+Z"/>
+<arg name="accel_axes" default="+X+Y+Z"/>
+<arg name="gyro_axes" default="$(arg accel_axes)"/>
 <node name="collate" pkg="mimu_calibrate" type="collate.py">
-  <remap from="magnetic_raw" to="mag_raw"/>
 </node>
 <node name="calibrate" pkg="mimu_calibrate" type="calibrate.py">
   <remap from="all_magnetic_points" to="collate/all_magnetic_points"/>
+  <remap from="paired_magnetic_points" to="collate/paired_magnetic_points"/>
+  <remap from="paired_accel_points" to="collate/paired_accel_points"/>
+  <param name="~mag_axes" value="$(arg mag_axes)"/>
+  <param name="~accel_axes" value="$(arg accel_axes)"/>
+  <param name="~gyro_axes" value="$(arg gyro_axes)"/>
+</node>
+<node name="variance" pkg="mimu_calibrate" type="variance.py">
 </node>
 <node name="$(anon scale1)" pkg="mimu_calibrate" type="cloud_scale.py">
   <remap from="in" to="collate/all_magnetic_points"/>
   <remap from="out" to="all_scaled_mag_points"/>
 </node>
 <node name="$(anon scale2)" pkg="mimu_calibrate" type="cloud_scale.py">
-  <remap from="in" to="collate/all_magnetic_points"/>
-  <remap from="out" to="half_scaled_mag_points"/>
-  <param name="scale" value="50000"/>
+  <remap from="in" to="calibrated_magnetic_points"/>
+  <remap from="out" to="calibrated_scaled_mag_points"/>
 </node>
+<node name="rqt" pkg="rqt_gui" type="rqt_gui" args="--standalone calibrate" required="true"/>
+<node name="rviz" pkg="rviz" type="rviz" args="-d $(find mimu_calibrate)/resources/calibrate.rviz" required="true"/>
 </launch>

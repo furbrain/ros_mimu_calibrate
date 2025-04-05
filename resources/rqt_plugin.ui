@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Calibration</class>
+ <widget class="QWidget" name="Calibration">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>200</width>
+    <height>558</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Calibration</string>
+  </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QPushButton" name="start_recording_but">
+      <property name="text">
+       <string>Start Recording</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="get_variance_but">
+      <property name="text">
+       <string>Calculate Variance and Bias</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="calibrate_but">
+      <property name="text">
+       <string>Calibrate Sensors</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="save_calibration_but">
+      <property name="text">
+       <string>Save Calibration</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -164,6 +164,7 @@ catkin_install_python(PROGRAMS
   scripts/rectify.py
   scripts/collate.py
   scripts/cloud_scale.py
+  scripts/variance.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

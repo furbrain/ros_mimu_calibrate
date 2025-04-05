@@ -11,7 +11,7 @@ import message_filters
 
 class MovementDetector:
     NUM_READINGS = 15
-    MAX_READINGS = np.array([2*1e-6]*3 + [0.3]*3 + [0.01]*3)
+    MAX_READINGS = np.array([6*1e-6]*3 + [1.0]*3 + [0.1]*3)
     def __init__(self):
         self.index = 0
         self.matrix = np.zeros((self.NUM_READINGS, 9))
@@ -21,6 +21,7 @@ class MovementDetector:
         self.matrix[self.index] = values
         self.index += 1
         std = np.std(self.matrix, axis=0)
+        rospy.loginfo(f"std: {std}")
         if self.index >= self.NUM_READINGS:
             self.full = True
             self.index = 0
@@ -56,12 +57,12 @@ class CollateNode:
         self.paired_sub = message_filters.ApproximateTimeSynchronizer(
             (message_filters.Subscriber("imu_raw", Imu),
             message_filters.Subscriber("magnetic_raw", MagneticField)),
-            queue_size=10, slop=0.01)
+            queue_size=10, slop=0.1)
         self.paired_sub.registerCallback(self.paired_callback)
         self.all_mag_cloud = UniqueCloud(proximity=self.proximity, pub_name="~all_magnetic_points")
         self.paired_mag_cloud = UniqueCloud(proximity=self.proximity, pub_name="~paired_magnetic_points")
         self.paired_accel_cloud = UniqueCloud(proximity=1, pub_name="~paired_accel_points")
-        self.last_ts = rospy.Time.now()
+        self.last_ts = rospy.Time()
         self.movement_detector = MovementDetector()
 
     def mag_callback(self, mag_data: MagneticField):
@@ -72,7 +73,9 @@ class CollateNode:
 
     def paired_callback(self, imu_data: Imu, magnetic_data: MagneticField):
         stamp = imu_data.header.stamp
+        rospy.loginfo(f"got paired data: {stamp}")
         if self.last_ts + self.SAMPLE_INTERVAL < stamp:
+            rospy.loginfo("new data")
             if self.last_ts + self.SAMPLE_INTERVAL * 2 < stamp:
                 self.last_ts = stamp
             else:

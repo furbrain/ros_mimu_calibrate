@@ -1,0 +1,12 @@
+<library path="src">
+  <class name="Calibration" type="mimu_calibrate.cal_plugin.MyPlugin" base_class_type="rqt_gui_py::Plugin">
+    <description>
+      A plugin to add sensor calibration
+    </description>
+    <qtgui>
+      <label>Calibration</label>
+      <icon type="theme">system-help</icon>
+      <statustip>Great user interface to provide real value.</statustip>
+    </qtgui>
+  </class>
+</library>
